@@ -16,7 +16,7 @@ CC = gcc
 
 Flags = -Wall -Werror -Wextra
 
-SRCs = test.c
+SRCs = main.c
 
 OBJs := $(SRCs:.c=.o)
 

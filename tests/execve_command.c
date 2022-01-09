@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   execve_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmilchev <kmilchev@student.42wolfsburg.de> +#+  +:+       +#+        */ ssh-add -l -E sha256
+/*   By: kmilchev <kmilchev@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 20:57:52 by kmilchev          #+#    #+#             */
 /*   Updated: 2022/01/08 20:57:52 by kmilchev         ###   ########.fr       */
@@ -18,7 +18,16 @@
 
 int main (void)
 {
-	// execve("a.out", [[], [NULL]], [NULL]);
-	execlp("echo", "echo", NULL);
+	char *arr[8];
+
+	arr[0] = "/usr/bin/wc -l";
+	arr[1] = "../file1";
+	arr[2] = "wc";
+	arr[3] = "echo";
+	arr[4] = "ls";
+	arr[5] = "../file2";
+	arr[6] = "../file2";
+	arr[7] = NULL;
+	execve(arr[0], arr, NULL);
 	return (0);
 }
