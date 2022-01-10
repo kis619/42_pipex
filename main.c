@@ -63,49 +63,27 @@ char	**get_commands(int argc, char *argv[])
 	arr[i] = NULL;
 	return (arr);
 }
-char *get_flags(char *command_args)
-{
-	while (*command_args != ' ')
-		command_args++;
-	return (++command_args);
-}
 
-char *get_command(char *command_args)
-{
-	char *command;
-	int i;
-
-	i = 0;
-	while (command_args[i] != ' ')
-		command[i] = command_args[i++];
-	command[i] = '\0';
-	return (command);
-}
 void	execute_first_command(char *argv[])
 {
-	char	*elements[4];
-	char	*path_cmds;
+	char *cmd;
+	char **cmd_flags;
 
-	path_cmds = "/usr/bin/";
-	elements[0] = ft_strjoin(path_cmds, argv[2]);
-	elements[1] = argv[1];
-	elements[2] = NULL;
-	if (ft_strchr(argv[2], ' '))
-		elements[2] = get_flags(argv[2]);
-	elements[3] = NULL;
-	execve(elements[0], elements, NULL);
+	cmd_flags = ft_split(argv[2], ' ');
+
+	cmd = ft_strjoin("/usr/bin/", cmd_flags[0]);
+	execve(cmd, cmd_flags, NULL);
 }
 
 void	execute_second_command(char *argv[])
 {
-	char	*elements[3];
-	char	*path_cmds;
+	char *cmd;
+	char **cmd_flags;
 
-	path_cmds = "/usr/bin/";
-	elements[0] = ft_strjoin(path_cmds, argv[3]);
-	elements[1] = STDIN_FILENO;
-	elements[2] = NULL;
-	execve(elements[0], elements, NULL);
+	cmd_flags = ft_split(argv[3], ' ');
+
+	cmd = ft_strjoin("/usr/bin/", cmd_flags[0]);
+	execve(cmd, cmd_flags, NULL);
 }
 
 void	close_desctiptors(int n_fds, ...)
@@ -127,16 +105,19 @@ int	main(int argc, char *argv[])
 	int	fd[2];
 	int	pid1;
 	int	pid2;
+	int fd_input;
 	int	fd_out;
 
 	if (argc < 5)
 		return (printf("Error! Too few arguments...\n"));
 	pipe(fd);
 	pid1 = fork();
+	fd_input = open(argv[1], O_RDONLY);
 	if (pid1 == 0)
 	{
+		dup2(fd_input, STDIN_FILENO);
 		dup2(fd[1], STDOUT_FILENO);
-		close_desctiptors(2, fd[0], fd[1]);
+		close_desctiptors(3, fd[0], fd[1], fd_input);
 		execute_first_command(argv);
 	}
 	pid2 = fork();
