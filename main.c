@@ -64,23 +64,12 @@ char	**get_commands(int argc, char *argv[])
 	return (arr);
 }
 
-void	execute_first_command(char *argv[])
+void	execute_command(char *argv)
 {
 	char *cmd;
 	char **cmd_flags;
 
-	cmd_flags = ft_split(argv[2], ' ');
-
-	cmd = ft_strjoin("/usr/bin/", cmd_flags[0]);
-	execve(cmd, cmd_flags, NULL);
-}
-
-void	execute_second_command(char *argv[])
-{
-	char *cmd;
-	char **cmd_flags;
-
-	cmd_flags = ft_split(argv[3], ' ');
+	cmd_flags = ft_split(argv, ' ');
 
 	cmd = ft_strjoin("/usr/bin/", cmd_flags[0]);
 	execve(cmd, cmd_flags, NULL);
@@ -99,7 +88,13 @@ void	close_desctiptors(int n_fds, ...)
 		i++;
 	}
 }
-
+void process_1(int fd_input, int *fd, char *argv[2])
+{
+	dup2(fd_input, STDIN_FILENO);
+	dup2(fd[1], STDOUT_FILENO);
+	close_desctiptors(3, fd[0], fd[1], fd_input);
+	execute_command(argv[2]);
+}
 int	main(int argc, char *argv[])
 {
 	int	fd[2];
@@ -114,12 +109,7 @@ int	main(int argc, char *argv[])
 	pid1 = fork();
 	fd_input = open(argv[1], O_RDONLY);
 	if (pid1 == 0)
-	{
-		dup2(fd_input, STDIN_FILENO);
-		dup2(fd[1], STDOUT_FILENO);
-		close_desctiptors(3, fd[0], fd[1], fd_input);
-		execute_first_command(argv);
-	}
+		process_1(fd_input, fd, argv);
 	pid2 = fork();
 	fd_out = open(argv[4], O_WRONLY);
 	if (pid2 == 0)
@@ -127,7 +117,7 @@ int	main(int argc, char *argv[])
 		dup2(fd[0], STDIN_FILENO);
 		dup2(fd_out, STDOUT_FILENO);
 		close_desctiptors(3, fd[0], fd[1], fd_out);
-		execute_second_command(argv);
+		execute_command(argv[argc - 2]);
 	}
 	close_desctiptors(3, fd[0], fd[1], fd_out);
 	waitpid(pid1, NULL, 0);
