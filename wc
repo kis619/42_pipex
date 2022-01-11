@@ -1,0 +1,16 @@
+total 44
+-rwxrwxrwx 1 kis619 kis619  1294 Jan  9 17:09 Makefile
+-rwxrwxrwx 1 kis619 kis619   185 Jan 11 19:05 error_checks.txt
+-rwxrwxrwx 1 kis619 kis619    64 Jan  9 20:14 file1
+-rwxrwxrwx 1 kis619 kis619    24 Jan 11 19:04 file11
+-rwxrwxrwx 1 kis619 kis619    24 Jan 11 19:04 file2
+-r-xr-xr-x 1 kis619 kis619    24 Jan 11 18:49 file6
+-rwxrwxrwx 1 kis619 kis619    24 Jan 11 18:58 file69
+-r-xr-xr-x 1 kis619 kis619    24 Jan 11 18:50 file7
+-r-xr-xr-x 1 kis619 kis619    24 Jan 11 18:53 file8
+drwxrwxrwx 1 kis619 kis619  4096 Jan 11 16:01 libft
+-rwxrwxrwx 1 kis619 kis619  3340 Jan 11 19:06 main.c
+-rwxrwxrwx 1 kis619 kis619  4744 Jan 11 19:06 main.o
+-rwxrwxrwx 1 kis619 kis619 18056 Jan 11 19:06 pipex
+drwxrwxrwx 1 kis619 kis619  4096 Jan 11 18:19 tests
+-rwxrwxrwx 1 kis619 kis619     0 Jan 11 19:06 wc

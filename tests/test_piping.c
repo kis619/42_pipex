@@ -18,14 +18,11 @@
 int main (int argc, char *argv[])
 {
 	int fd[2];
+	char *elements[3];
 	pipe(fd);
-
-	// int file;
-	// file = open(argv[1], O_RDONLY);
 
 	int pid1 = fork();
 
-	char *input_file;
 
 	if (pid1 == 0)
 	{
@@ -33,16 +30,31 @@ int main (int argc, char *argv[])
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[0]);
 		close(fd[1]);
-		execlp("cat", "cat", argv[1], NULL);
+		
+		
+		elements[0] = "/usr/bin/cat";
+		elements[1] = argv[1];
+		elements[2] = NULL;
+		execve("/usr/bin/cat", elements, NULL);
 	}
+	int fd_out;
+
+	fd_out = open("out_file", O_WRONLY);
 
 	int pid2 = fork();
 	if (pid2 == 0)
 	{
 		dup2(fd[0], STDIN_FILENO);
+		dup2(fd_out, STDOUT_FILENO);
 		close(fd[0]);
 		close(fd[1]);
-		execlp("grep", "grep", "тряс", NULL);
+		char *elements[4];
+		elements[0] = "/usr/bin/grep";
+		elements[1] = STDIN_FILENO;
+		elements[1] = "газ";
+		elements[2] = NULL;
+		execve(elements[0], elements, NULL);
+		// execlp("grep", "grep", "тряс", NULL);
 	}
 	close(fd[0]);
 	close(fd[1]);

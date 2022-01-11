@@ -10,11 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft/libft.h"
 
-static int	ft_count_strings(char const *s, char c);
 static void	ft_find_word(char **next_str, int *s_len, char c);
-// static char	**ft_free(char **array);
 
 char	**ft_split(char const *s, char c)
 {
@@ -26,7 +24,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	nbr_strings = ft_count_strings(s, c);
+	nbr_strings = 2;
 	strings = (char **)ft_calloc(nbr_strings + 1, sizeof(char *));
 	if (!(strings))
 	{
@@ -45,38 +43,29 @@ char	**ft_split(char const *s, char c)
 	return (strings);
 }
 
-static int	ft_count_strings(char const *s, char c)
-{
-	int	i;
-	int	words;
-
-	i = 0;
-	words = 0;
-	while (s[i])
-	{
-		while (s[i] == c)
-			i++;
-		if (s[i] != c && s[i])
-			words++;
-		while (s[i] != c && s[i])
-			i++;
-	}
-	return (words);
-}
-
 static void	ft_find_word(char **next_str, int *s_len, char c)
 {
 	int	i;
+	static int count = 0;
 
 	*next_str += *s_len;
 	*s_len = 0;
 	i = 0;
 	while (**next_str && **next_str == c)
 		(*next_str)++;
+	count += 1;
 	while ((*next_str)[i])
 	{
-		if ((*next_str)[i] == c)
+		if (count > 1)
+		{
+			if ((*next_str)[i] == '\0')
 			return ;
+		}
+		else
+		{
+			if ((*next_str)[i] == c)
+			return ;
+		}
 		(*s_len)++;
 		i++;
 	}
@@ -123,25 +112,4 @@ static void	ft_find_word(char **next_str, int *s_len, char c)
 // 			}
 // 		}
 // 	ft_free(tabstr);
-// }
-
-// int main(void)
-// {
-// 	char **array;
-
-// 	array = ft_split("edno dve tri", ' ');
-// 	return(0);
-// }
-// #include <stdio.h>
-// int main()
-// {
-//     char *test = "wc -l";
-//     char **test_arr;
-
-//     test_arr = ft_split(test, ' ');
-//     printf("%s\n", test_arr[0]);
-//     printf("%s\n", test_arr[1]);
-//     printf("%p\n", ((void *)0));
-//     if (test_arr[2] == NULL)
-// 		printf("Hey");
 // }

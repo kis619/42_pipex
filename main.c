@@ -15,22 +15,23 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <stdarg.h>
-//#include <error.h>?
+
 // errno: some number
 //#include <string.h>?
 
-void	print_strings_array(int count, char **args)
+static char	**ft_free(char **array)
 {
 	int	i;
 
 	i = 0;
-	while (i < count)
+	while (array[i])
 	{
-		printf("Argument number %d: %s\n", i, args[i]);
+		free(array[i]);
 		i++;
 	}
+	free(array);
+	return (NULL);
 }
-
 
 void	execute_command(char *argv)
 {
@@ -41,6 +42,10 @@ void	execute_command(char *argv)
 
 	cmd = ft_strjoin("/usr/bin/", cmd_flags[0]);
 	execve(cmd, cmd_flags, NULL);
+	perror(cmd_flags[0]);
+	ft_free(cmd_flags);
+	free(cmd);
+	exit(420);
 }
 
 void	close_desctiptors(int n_fds, ...)
@@ -57,38 +62,58 @@ void	close_desctiptors(int n_fds, ...)
 	}
 }
 
+void ft_validity_check(int n, char *error_message)
+{
+	if (n == -1)
+	{
+		perror(error_message);
+		exit(69);
+	}
+}
+void check_number_of_arguments(int n)
+{
+	if (n < 5)
+	{
+		printf("Error! Too few arguments...\n");
+		exit(420);
+	}
+}
+
 void spawn_process(char *argv[])
 {
 	int pid;
 	int fd[2];
 
-	pipe(fd);
+	ft_validity_check(pipe(fd), "Piping error");
 	printf("%s\n", argv[0]);
 	pid = fork();
+	ft_validity_check(pid, "Forking error");
 	if (pid == 0)
 	{
 		dup2(fd[1], STDOUT_FILENO);
-		close_desctiptors(2, fd[0], fd[1]);
+		close(fd[0]);
 		execute_command(argv[0]);
 	}
 
 	dup2(fd[0], STDIN_FILENO);
-	close_desctiptors(2, fd[0], fd[1]);
+	close(fd[1]);
 	waitpid(pid, NULL, 0);
 }
+
 int	main(int argc, char *argv[])
 {
-	int	fd[2];
 	int fd_input;
 	int	fd_out;
+	int counter;
 
+	check_number_of_arguments(argc);
 	fd_input = open(argv[1], O_RDONLY);
-	fd_out = open(argv[argc - 1], O_WRONLY);
+	ft_validity_check(fd_input, argv[1]);
+	fd_out = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC, S_IWUSR);
+	ft_validity_check(fd_input, argv[1]);
 	dup2(fd_input, STDIN_FILENO);
-	dup2(fd_out, STDOUT_FILENO);
-	close_desctiptors(2, fd_out, fd_input);
-	pipe(fd);
-	int counter = 2;
+	dup2(fd_out, STDOUT_FILENO);	// close_desctiptors(2, fd_out, fd_input);  //Warning: invalid file descriptor -1 in syscall close()
+	counter = 2;
 	while (counter < argc - 2)
 	{
 		spawn_process(argv + counter);

@@ -1,0 +1,5 @@
+1. Number of arguments - done
+2. Access to each file - done
+3. Errors when entering a non-existent command (compare with actual behaviour) - done
+4. Errors from pipe and fork - done
+5. Check if files exist - done
