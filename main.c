@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <stdarg.h>
+#include <errno.h>
 
 // errno: some number
 //#include <string.h>?
@@ -45,7 +46,7 @@ void	execute_command(char *argv)
 	perror(cmd_flags[0]);
 	ft_free(cmd_flags);
 	free(cmd);
-	exit(420);
+	exit(1);
 }
 
 void	close_desctiptors(int n_fds, ...)
@@ -67,15 +68,25 @@ void ft_validity_check(int n, char *error_message)
 	if (n == -1)
 	{
 		perror(error_message);
-		exit(69);
+		exit(errno);
 	}
+}
+
+void ft_pipe_fork(int n, char *error_message)
+{
+	if (n == -1)
+	{
+		perror(error_message);
+		exit(errno);
+	}
+	
 }
 void check_number_of_arguments(int n)
 {
 	if (n < 5)
 	{
 		printf("Error! Too few arguments...\n");
-		exit(420);
+		exit(1);
 	}
 }
 
@@ -84,8 +95,7 @@ void spawn_process(char *argv[])
 	int pid;
 	int fd[2];
 
-	ft_validity_check(pipe(fd), "Piping error");
-	printf("%s\n", argv[0]);
+	ft_pipe_fork(pipe(fd), "Piping error");
 	pid = fork();
 	ft_validity_check(pid, "Forking error");
 	if (pid == 0)
