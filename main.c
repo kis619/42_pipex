@@ -37,11 +37,10 @@ static char	**ft_free(char **array)
 
 void	execute_command(char *argv)
 {
-	char *cmd;
-	char **cmd_flags;
+	char	*cmd;
+	char	**cmd_flags;
 
 	cmd_flags = ft_split(argv, ' ');
-
 	cmd = ft_strjoin("/usr/bin/", cmd_flags[0]);
 	execve(cmd, cmd_flags, NULL);
 	perror(cmd_flags[0]);
@@ -64,16 +63,13 @@ void	close_desctiptors(int n_fds, ...)
 	}
 }
 
-void ft_validity_check(int n, char *error_message)
+void	ft_validity_check(int n, char *error_message)
 {
 	if (n == -1)
-	{
 		perror(error_message);
-		exit(errno);
-	}
 }
 
-void check_number_of_arguments(int n)
+void	check_number_of_arguments(int n)
 {
 	if (n < 5)
 	{
@@ -82,12 +78,11 @@ void check_number_of_arguments(int n)
 	}
 }
 
-void spawn_process(char *argv[])
+void	spawn_process(char *argv[])
 {
-	int pid;
-	int fd[2];
-	// int status = 0;
-	
+	int	pid;
+	int	fd[2];
+
 	ft_validity_check(pipe(fd), "Piping error");
 	pid = fork();
 	ft_validity_check(pid, "Forking error");
@@ -97,19 +92,16 @@ void spawn_process(char *argv[])
 		close(fd[0]);
 		execute_command(argv[0]);
 	}
-
 	dup2(fd[0], STDIN_FILENO);
 	waitpid(pid, NULL, 1);
-	// if (status == 1)
-	// 	exit(1);
 	close(fd[1]);
 }
 
 int	main(int argc, char *argv[])
 {
-	int fd_input;
+	int	fd_input;
 	int	fd_out;
-	int counter;
+	int	counter;
 
 	check_number_of_arguments(argc);
 	fd_input = open(argv[1], O_RDONLY);
@@ -128,5 +120,3 @@ int	main(int argc, char *argv[])
 	close_desctiptors(2, fd_out, fd_input);
 	return (0);
 }
-
-
