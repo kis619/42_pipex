@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmilchev <kmilchev@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/27 20:21:19 by kmilchev          #+#    #+#             */
-/*   Updated: 2021/11/27 20:21:19 by kmilchev         ###   ########.fr       */
+/*   Created: 2021/12/07 20:49:02 by kmilchev          #+#    #+#             */
+/*   Updated: 2021/12/07 20:49:02 by kmilchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "printf.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_test(int expected, int actual, int index)
 {
-	if (!s)
-		return ;
-	write(fd, s, ft_strlen(s));
+	if (actual == expected)
+		printf("\nGood job!\n");
+	else
+	{	
+		printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+		printf("\nExpected = %d\nActual = %d\n", expected, actual);
+	}
+	printf("End of Test %d\n", index);
+	printf("-------------------------------\n");
 }

@@ -5,28 +5,46 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmilchev <kmilchev@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/27 20:32:13 by kmilchev          #+#    #+#             */
-/*   Updated: 2021/11/27 20:32:13 by kmilchev         ###   ########.fr       */
+/*   Created: 2021/12/07 20:52:28 by kmilchev          #+#    #+#             */
+/*   Updated: 2021/12/07 20:52:28 by kmilchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "printf.h"
 
-void	ft_putnbr_fd(int n, int fd)
+static int	ft_min_num_0(int n, int fd)
 {
 	if (n == -2147483648)
-	{
-		ft_putchar_fd('-', fd);
-		ft_putchar_fd('2', fd);
-		ft_putnbr_fd(147483648, fd);
-		return ;
-	}
+		return (ft_putstr_fd("-2147483648", fd));
+	else
+		return (ft_putchar_fd('0', fd));
+}
+
+int	ft_putnbr_fd(int n, int fd)
+{
+	int		i;
+	char	c[10];
+	int		printed_chars;
+
+	printed_chars = 0;
+	if (fd < 0)
+		return (0);
+	if (n == 0 || n == -2147483648)
+		return (ft_min_num_0(n, fd));
 	if (n < 0)
 	{
-		ft_putchar_fd('-', fd);
+		printed_chars += ft_putchar_fd('-', fd);
 		n = -n;
 	}
-	if (n >= 10)
-		ft_putnbr_fd(n / 10, fd);
-	ft_putchar_fd(n % 10 + '0', fd);
+	i = 0;
+	while (n > 0)
+	{
+		c[i] = n % 10 + '0';
+		n = n / 10;
+		i++;
+	}
+	i--;
+	while (i >= 0)
+		printed_chars += ft_putchar_fd(c[i--], fd);
+	return (printed_chars);
 }

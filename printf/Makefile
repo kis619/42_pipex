@@ -5,46 +5,38 @@
 #                                                     +:+ +:+         +:+      #
 #    By: kmilchev <kmilchev@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/01/04 15:53:25 by kmilchev          #+#    #+#              #
-#    Updated: 2022/01/04 15:53:25 by kmilchev         ###   ########.fr        #
+#    Created: 2021/12/06 13:07:48 by kmilchev          #+#    #+#              #
+#    Updated: 2021/12/06 13:07:48 by kmilchev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-NAME = pipex
+NAME = printf.a
 
 CC = gcc
 
-Flags = -Wall -Werror -Wextra
+CFLAGS = -Werror -Wextra -Wall
 
-SRCs = main.c
+SRCs = ft_printf.c ft_putnbr_fd.c ft_putchar_fd.c \
+		ft_test.c ft_print_according_to_type.c ft_putstr_fd.c \
+		ft_put_unsigned_nbr_fd.c ft_put_hexa_x_fd.c
 
 OBJs := $(SRCs:.c=.o)
 
-LIBPATH = ./libft
+RM = rm -f
 
-LIBRARY = libft.a
-
-PRINTPATH = ./printf
-
-FT_PRINTF = libftprintf.a
-
-all:  $(LIBRARY) $(NAME) $(FT_PRINTF)
-
-$(FT_PRINTF):
-	$(MAKE) -C $(PRINTPATH)
-
-$(LIBRARY):
-	$(MAKE) -C $(LIBPATH)  
+all: $(NAME)
 
 $(NAME): $(OBJs)
-	$(CC) $(Flags) $(SRCs) -o pipex ./libft/libft.a ./printf/printf.a
+	ar rcs $(NAME) $(OBJs)
 
-clean:
+clean: 
 	$(RM) $(OBJs)
 
-
 fclean: clean
-	$(MAKE) fclean -C $(LIBPATH)
 	$(RM) $(NAME)
+	$(RM) *.out
 
 re: fclean all
+
+test: ft_main.c
+	gcc -Wall -Werror -Wextra ft_main.c $(SRCs) && ./a.out
+
