@@ -28,7 +28,7 @@ PRINTPATH = ./printf
 
 FT_PRINTF = printf.a
 
-all:  $(LIBRARY) $(NAME) $(FT_PRINTF)
+all:  $(LIBRARY) $(FT_PRINTF) $(NAME) 
 
 $(FT_PRINTF):
 	$(MAKE) -C $(PRINTPATH)

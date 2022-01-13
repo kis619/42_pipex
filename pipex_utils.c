@@ -62,20 +62,21 @@ char	**get_paths(char *env[])
 {
 	int		idx;
 	char	*str;
+	char	**out;
 
 	idx = 0;
 	while (!(ft_strnstr(env[idx], "PATH=", 5)))
 		idx++;
 	str = ft_strtrim(env[idx], "PATH=");
-	env = ft_split(str, ':');
+	out = ft_split(str, ':');
 	free(str);
 	idx = 0;
-	while (env[idx])
+	while (out[idx])
 	{
-		str = ft_strjoin(env[idx], "/");
-		free(env[idx]);
-		env[idx] = str;
+		str = ft_strjoin(out[idx], "/");
+		free(out[idx]);
+		out[idx] = str;
 		idx++;
 	}
-	return (env);
+	return (out);
 }
