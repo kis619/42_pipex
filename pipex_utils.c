@@ -1,0 +1,81 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmilchev <kmilchev@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/13 14:21:06 by kmilchev          #+#    #+#             */
+/*   Updated: 2022/01/13 14:21:06 by kmilchev         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "pipex.h"
+
+void	close_desctiptors(int n_fds, ...)
+{
+	va_list	fds;
+	int		i;
+
+	va_start(fds, n_fds);
+	i = 0;
+	while (i < n_fds)
+	{
+		close(va_arg(fds, int));
+		i++;
+	}
+}
+
+char	**ft_free(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+	return (NULL);
+}
+
+void	ft_validity_check(int n, char *error_message)
+{
+	if (n == -1)
+	{
+		perror(error_message);
+		exit(2);
+	}
+}
+
+void	check_number_of_arguments(int n)
+{
+	if (n < 5)
+	{
+		ft_printf("Error! Too few arguments...\n");
+		exit(1);
+	}
+}
+
+char	**get_paths(char *env[])
+{
+	int		idx;
+	char	*str;
+
+	idx = 0;
+	while (!(ft_strnstr(env[idx], "PATH=", 5)))
+		idx++;
+	str = ft_strtrim(env[idx], "PATH=");
+	env = ft_split(str, ':');
+	free(str);
+	idx = 0;
+	while (env[idx])
+	{
+		str = ft_strjoin(env[idx], "/");
+		free(env[idx]);
+		env[idx] = str;
+		idx++;
+	}
+	return (env);
+}

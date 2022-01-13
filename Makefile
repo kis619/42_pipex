@@ -16,7 +16,7 @@ CC = gcc
 
 Flags = -Wall -Werror -Wextra
 
-SRCs = main.c
+SRCs = main.c pipex_utils.c
 
 OBJs := $(SRCs:.c=.o)
 
@@ -26,7 +26,7 @@ LIBRARY = libft.a
 
 PRINTPATH = ./printf
 
-FT_PRINTF = libftprintf.a
+FT_PRINTF = printf.a
 
 all:  $(LIBRARY) $(NAME) $(FT_PRINTF)
 

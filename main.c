@@ -10,77 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "libft/libft.h"
-#include "printf/printf.h"
-#include <fcntl.h>
-#include <sys/wait.h>
-#include <stdarg.h>
-#include <errno.h>
+#include "pipex.h"
 
-// errno: some number
-//#include <string.h>?
 
-static char	**ft_free(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-	return (NULL);
-}
-
-void	execute_command(char *argv)
+void	execute_command(char *argv, char *envp[])
 {
 	char	*cmd;
 	char	**cmd_flags;
+	int		idx;
 
+	idx = 0;
 	cmd_flags = ft_split(argv, ' ');
-	cmd = ft_strjoin("/usr/bin/", cmd_flags[0]);
-	execve(cmd, cmd_flags, NULL);
+	while (envp[idx] != NULL)
+	{
+		cmd = ft_strjoin(envp[idx], cmd_flags[0]);
+		execve(cmd, cmd_flags, envp);
+		free(cmd);
+		idx++;
+	}
+	ft_free(envp);
 	perror(cmd_flags[0]);
 	ft_free(cmd_flags);
-	free(cmd);
 	exit(1);
 }
 
-void	close_desctiptors(int n_fds, ...)
+void	spawn_process(char *argv[], char *envp[])
 {
-	va_list	fds;
-	int		i;
-
-	va_start(fds, n_fds);
-	i = 0;
-	while (i < n_fds)
-	{
-		close(va_arg(fds, int));
-		i++;
-	}
-}
-
-void	ft_validity_check(int n, char *error_message)
-{
-	if (n == -1)
-		perror(error_message);
-}
-
-void	check_number_of_arguments(int n)
-{
-	if (n < 5)
-	{
-		ft_printf("Error! Too few arguments...\n");
-		exit(1);
-	}
-}
-
-void	spawn_process(char *argv[])
-{
-	int	pid;
+	pid_t	pid;
 	int	fd[2];
 
 	ft_validity_check(pipe(fd), "Piping error");
@@ -90,14 +46,14 @@ void	spawn_process(char *argv[])
 	{
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[0]);
-		execute_command(argv[0]);
+		execute_command(argv[0], envp);
 	}
 	dup2(fd[0], STDIN_FILENO);
 	waitpid(pid, NULL, 1);
 	close(fd[1]);
 }
 
-int	main(int argc, char *argv[])
+int	main(int argc, char *argv[], char *envp[])
 {
 	int	fd_input;
 	int	fd_out;
@@ -110,13 +66,14 @@ int	main(int argc, char *argv[])
 	ft_validity_check(fd_out, argv[1]);
 	dup2(fd_input, STDIN_FILENO);
 	dup2(fd_out, STDOUT_FILENO);
+	envp = get_paths(envp);
 	counter = 2;
 	while (counter < argc - 2)
 	{
-		spawn_process(argv + counter);
+		spawn_process(argv + counter, envp);
 		counter++;
 	}
-	execute_command(argv[argc - 2]);
+	execute_command(argv[argc - 2], envp);
 	close_desctiptors(2, fd_out, fd_input);
 	return (0);
 }
