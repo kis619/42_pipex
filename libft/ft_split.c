@@ -116,8 +116,7 @@ static void	ft_find_word(char **next_str, int *s_len, char c)
 // 		{
 // 			while (tabstr[i] != NULL)
 // 			{
-// 				ft_print_result(tabstr[i]);
-				
+// 				ft_print_result(tabstr[i]);	
 // 				write(1, "\n", 1);
 // 				i++;
 // 			}

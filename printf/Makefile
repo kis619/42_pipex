@@ -37,6 +37,4 @@ fclean: clean
 
 re: fclean all
 
-test: ft_main.c
-	gcc -Wall -Werror -Wextra ft_main.c $(SRCs) && ./a.out
 

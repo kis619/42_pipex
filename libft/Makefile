@@ -24,7 +24,7 @@ SRCS = 	ft_memmove.c ft_strjoin.c ft_isalnum.c ft_isdigit.c ft_substr.c ft_memch
 		ft_strncmp.c ft_striteri.c ft_isprint.c ft_isalpha.c \
 		ft_strdup.c ft_bzero.c ft_atoi.c \
 		ft_strrchr.c ft_strmapi.c ft_isascii.c ft_strlcpy.c ft_split.c \
-		ft_strlen.c new_split.c
+		ft_strlen.c
 
 
 SRCs_bonus = 	ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c \

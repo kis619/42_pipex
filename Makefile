@@ -37,7 +37,7 @@ $(LIBRARY):
 	$(MAKE) -C $(LIBPATH)  
 
 $(NAME): $(OBJs)
-	$(CC) $(Flags) $(SRCs) -o pipex ./libft/libft.a ./printf/printf.a
+	$(CC) $(Flags) $(SRCs) -o $(NAME) $(LIBPATH)/$(LIBRARY) $(PRINTPATH)/$(FT_PRINTF)
 
 clean:
 	$(RM) $(OBJs)
@@ -45,6 +45,7 @@ clean:
 
 fclean: clean
 	$(MAKE) fclean -C $(LIBPATH)
+	$(MAKE) fclean -C $(PRINTPATH)
 	$(RM) $(NAME)
 
 re: fclean all

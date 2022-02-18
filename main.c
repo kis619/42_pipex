@@ -12,7 +12,6 @@
 
 #include "pipex.h"
 
-
 void	execute_command(char *argv, char **possible_paths, char **envp)
 {
 	char	*cmd;
@@ -37,7 +36,7 @@ void	execute_command(char *argv, char **possible_paths, char **envp)
 void	spawn_process(char *argv[], char **possible_paths, char *envp[])
 {
 	pid_t	pid;
-	int	fd[2];
+	int		fd[2];
 
 	ft_validity_check(pipe(fd), "Piping error");
 	pid = fork();
