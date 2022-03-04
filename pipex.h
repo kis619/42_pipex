@@ -20,7 +20,7 @@
 # include <stdarg.h>
 # include <errno.h>
 
-void	close_desctiptors(int n_fds, ...);
+void	close_descriptors(int n_fds, ...);
 char	**ft_free(char **array);
 void	ft_validity_check(int n, char *error_message);
 void	check_number_of_arguments(int n);
