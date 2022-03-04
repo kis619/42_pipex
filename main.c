@@ -74,6 +74,6 @@ int	main(int argc, char *argv[], char *envp[])
 		counter++;
 	}
 	execute_command(argv[argc - 2], possible_paths, envp);
-	close_desctiptors(2, fd_out, fd_input);
+	close_descriptors(2, fd_out, fd_input);
 	return (0);
 }
