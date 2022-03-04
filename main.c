@@ -63,7 +63,7 @@ int	main(int argc, char *argv[], char *envp[])
 	fd_input = open(argv[1], O_RDONLY);
 	ft_validity_check(fd_input, argv[1]);
 	fd_out = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
-	ft_validity_check(fd_out, argv[1]);
+	ft_validity_check(fd_out, argv[argc - 1]);
 	dup2(fd_input, STDIN_FILENO);
 	dup2(fd_out, STDOUT_FILENO);
 	possible_paths = get_paths(envp);
