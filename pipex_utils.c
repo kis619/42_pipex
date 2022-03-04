@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-void	close_desctiptors(int n_fds, ...)
+void	close_descriptors(int n_fds, ...)
 {
 	va_list	fds;
 	int		i;
